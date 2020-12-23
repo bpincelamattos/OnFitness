@@ -1,23 +1,47 @@
 require('dotenv').config();
 const express = require('express');
+const dbFile = require('./db');
+const bcrypt = require('bcrypt');
+var passport = require('passport');
+var session = require('express-session');
+const flash = require('connect-flash');
+//var flash = require('express-flash');
+const cookieParser = require('cookie-parser');
 const app = express();
 const PORT = 3000;
-const mustacheExpress = require('mustache-express');
 
-//Register '.mustache' extension with The mustache Express
-app.engine('html', mustacheExpress());
-app.set('views', './views')
-app.set('view engine', 'html')
+app.use(cookieParser('secret'));
+app.use(flash());
+app.use(session({
+        secret: 'abcdefg',
+        resave: false,
+        saveUninitialized: false,
+        cookie: {maxAge:60000}
+    })
+);
+
+require('./controllers/auth');
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+app.use(express.static("public"));
+
+// set the view engine to ejs
+app.set('view engine','ejs');
 
 
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 
+
 //Importing our Routes
-const workoutRoutes = require('./routes/workouts');
+const onFitnessRoutes = require('./routes/onfitness');
+const authRoutes = require('./routes/auth');
 
 // Routes - Orders
-app.use('/workouts', workoutRoutes);
+app.use('/onfitness', onFitnessRoutes);
+app.use('/auth', authRoutes);
 
 app.get('*', (req, res) => {
     res.status(404).send('Nao Achei');
@@ -26,4 +50,3 @@ app.get('*', (req, res) => {
 app.listen(PORT, () => {
     console.log(`Server started on PORT:${PORT}`);
 })
-
