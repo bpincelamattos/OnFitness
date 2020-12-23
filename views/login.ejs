@@ -1,0 +1,17 @@
+<% if (errors.length >0) {%>
+    <li><%= errors %></li>
+<% } %>
+
+<form action="/auth/login" method="post">
+    <div>
+        <label>Email:</label>
+        <input type="text" name="email"/>
+    </div>
+    <div>
+        <label>Password:</label>
+        <input type="password" name="password"/>
+    </div>
+    <div>
+        <input type="submit" value="Log In"/>
+    </div>
+</form>

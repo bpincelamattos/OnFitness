@@ -1,7 +1,8 @@
 CREATE TABLE users (
     id serial primary key,
-    name varchar (60) not null,
-    email varchar (60) not null
+    name varchar (60),
+    email varchar (60) not null,
+    password varchar (60) not null
 );
 
 CREATE TABLE workoutPost (
