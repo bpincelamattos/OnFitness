@@ -5,9 +5,9 @@
   "scripts": {
     "db:create": "createdb on_fitnessdb",
     "db:drop": "dropdb on_fitnessdb",
-    "db:init": "psql -f schema.sql on_fitnessdb",
+    "db:init": "psql -f ./models/schema.sql on_fitnessdb",
     "db:seed": "psql -f seed.sql on_fitnessdb",
-    "db:reset": "npm run db:drop && npm run db:create && npm run db:init && npm run db:seed",
+    "db:reset": "npm run db:drop && npm run db:create && npm run db:init",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -22,9 +22,14 @@
     "express": "^4.17.1",
     "express-flash": "0.0.2",
     "express-session": "^1.17.1",
+    "fs": "0.0.1-security",
+    "method-override": "^3.0.0",
+    "multer": "^1.4.2",
+    "multiparty": "^4.2.2",
     "passport": "^0.4.1",
     "passport-facebook": "^3.0.0",
     "passport-local": "^1.0.0",
+    "path": "^0.12.7",
     "pg-promise": "^10.8.1"
   },
   "devDependencies": {},

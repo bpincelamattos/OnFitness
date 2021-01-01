@@ -1,22 +1,23 @@
 require('dotenv').config();
 const express = require('express');
-const dbFile = require('./db');
+const dbFile = require('./models/db');
 const bcrypt = require('bcrypt');
 var passport = require('passport');
 var session = require('express-session');
 const flash = require('connect-flash');
-//var flash = require('express-flash');
 const cookieParser = require('cookie-parser');
+var methodOverride = require('method-override')
 const app = express();
 const PORT = 3000;
 
+app.use(methodOverride('_method'))
 app.use(cookieParser('secret'));
 app.use(flash());
 app.use(session({
         secret: 'abcdefg',
         resave: false,
         saveUninitialized: false,
-        cookie: {maxAge:60000}
+        cookie: {maxAge:600000}
     })
 );
 
@@ -25,7 +26,7 @@ require('./controllers/auth');
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use(express.static("public"));
+app.use("/public",express.static(__dirname + "/public"));
 
 // set the view engine to ejs
 app.set('view engine','ejs');
