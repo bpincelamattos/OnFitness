@@ -7,9 +7,10 @@ CREATE TABLE users (
 
 CREATE TABLE workoutPost (
     id serial primary key,
-    media text not null,
+    path text not null,
     exercise_type text not null,
     exercise_description text not null,
+    created_at date DEFAULT CURRENT_DATE,
     user_id integer references users (id)
 );
 

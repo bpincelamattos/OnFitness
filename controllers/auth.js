@@ -1,10 +1,9 @@
 const passport = require('passport');
-const dbFile = require('../db');
+const dbFile = require('../models/db');
 const FacebookStrategy = require('passport-facebook').Strategy;
 const LocalStrategy = require('passport-local').Strategy;
 const express = require('express');
 const app = express();
-
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 
@@ -14,10 +13,12 @@ exports.createUser = (req, res) => {
   const password = req.body.password;
   bcrypt.hash(password, saltRounds, function(err, hash) {
     dbFile.db.none("INSERT INTO users (name, email, password) VALUES ($1, $2, $3)", 
-                [name, email, hash]).then( () => {
-        res.render('create');
+    [name, email, hash]).then( () => {
+      dbFile.db.one("SELECT * from users WHERE email = $1", [email])
+      .then((user) =>{
+        res.redirect(`/onfitness/user/${user.id}`);
+      }) 
     });
-    // Store hash in your password DB.
   });
 }
 
@@ -28,7 +29,6 @@ passport.use(new FacebookStrategy({
     callbackURL: process.env.FACEBOOK_CALL_BACK_URL
   },
   function(accessToken, refreshToken, profile, cb) {
-    console.log(profile);
       return cb(null,profile);
   }));
 
@@ -65,10 +65,8 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 passport.serializeUser(function(user, cb) {
-  console.log('Serialize user called');
   cb(null, user);
 });
 passport.deserializeUser(function(obj, cb) {
-  console.log('Deserialize user called');
   cb(null, obj);
 });

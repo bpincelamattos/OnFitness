@@ -2,10 +2,8 @@ const express = require('express');
 const router = express.Router();
 const passport = require('passport');
 const controller = require('../controllers/auth');
+const dbFile = require('../models/db');
 const app = express();
-
-
-
 
 //Facebook Login
 router.get('/facebook', passport.authenticate('facebook'));
@@ -19,16 +17,18 @@ router.get('/facebook/callback',
 //Local-Strategy - Log in
 router.get('/login', (req, res, next) => {
   const errors = req.flash().error || [];
-  console.log(errors)
   res.render('login', {errors});
 });
 router.post('/login', passport.authenticate('local',{ 
   failureFlash: true, 
   failureRedirect: '/auth/login',  
 }), (req, res, next) => {
-    res.redirect('/onfitness/create');
+  const email = req.body.email;
+  dbFile.db.one("SELECT * from users WHERE email = $1", [email])
+    .then((user) =>{
+      res.redirect(`/onfitness/user/${user.id}`);
+    })
   });
-
 
 //Local-Strategy - Sign up a new user
 router.get('/signup', (req, res, next) => {

@@ -8,24 +8,17 @@ function ensureAuthenticated(req, res, next) {
     if (req.isAuthenticated()) {
         return next();
     }
-    res.redirect('/login');
+    res.redirect('/auth/login');
 }
 
+router.get('/user/:id', ensureAuthenticated, controller.findUser) //Get User Page
 
-router.get('/workouts', controller.findAll) //Get All workout post
+router.post('/workouts', ensureAuthenticated, controller.create) //Post a workout
 
-router.post('/workouts', controller.create) //Post a workout
+router.patch('/workouts/:id', ensureAuthenticated, controller.update); //Update workout by ID
 
-//router.get('/list', controller.list)
+router.delete('/workouts/:id', ensureAuthenticated, controller.delete) //Delete a post by ID
 
-router.get('/create', ensureAuthenticated, controller.new)
-
-router.delete('/workouts/:id', controller.delete) //Delete a post by ID
-
-router.get('/workouts/:id', controller.findOneId); //Get a post by ID 
-
-router.get('/workouts/exerciseType/:exercise_type', controller.findOneType); //Get a post by exercise type
-
-router.patch('/workouts/:id', controller.update); //Update workout by ID
+router.get('/workouts/exerciseType/', ensureAuthenticated, controller.findOneType); //Get a post by exercise type
 
 module.exports = router;
