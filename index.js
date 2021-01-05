@@ -10,9 +10,10 @@ const app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 const PORT = process.env.PORT || 3000;
+const DBCONNECTIONSTRING = process.env.DATABASE_URL || `postgres://postgres:${process.env.PGP_PASSWORD}@localhost:5432/on_fitnessdb`;
 
  const pgSession = require('connect-pg-simple')(session);
- const pgStoreConfig = {conString: `postgres://postgres:${process.env.PGP_PASSWORD}@localhost:5432/on_fitnessdb`}
+ const pgStoreConfig = {conString: DBCONNECTIONSTRING};
 
 app.use(cookieParser('secret'));
 app.use(flash());
@@ -31,7 +32,7 @@ require('./controllers/auth');
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use("/public",express.static(__dirname + "/public"));
+app.use("/public",express.static(__dirname + "public"));
 
 // set the view engine to ejs
 app.set('view engine','ejs');
