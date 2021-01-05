@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+    <link href="/public/css/likesStyle.css" rel="stylesheet">
+    <script src='https://kit.fontawesome.com/a076d05399.js'></script>
+    <title>Posts Liked</title>
+</head>
+<body>
+    <div class="row py-5 px-4">
+        <div class="col-md-5 mx-auto">
+            <!-- Profile widget -->
+            <div class="bg-white shadow rounded overflow-hidden">
+                <div class="px-4 pt-0 pb-4 cover">
+                                    
+                <div >
+                    
+                </div>
+                </div> 
+                <div class="px-4 py-3">
+                </div>
+                <div class="py-4 px-4">
+                    <div class="d-flex align-items-center justify-content-between mb-3">
+                        <h5 class="mb-0">My Likes</h5>
+                    </div>
+                    <div class="row">
+                        <% if (workoutPosts) { %>
+                            <% for (let i=0; i<workoutPosts.length; i++) { %>
+                                <div class="col" style="margin: auto;">
+                                    <div class="card h-100" style="width: 23rem;">
+                                        <img src="/<%= workoutPosts[i].path.replace(/\\/g, '/') %>" class="card-img-top d-block w-100" />
+                                        <div class="card-body">
+                                            <h5 class="card-title"><input class="input-display" id="type<%= [i]%>" disabled="disabled" value="<%= workoutPosts[i].exercise_type %>"></h5>
+                                            <div>
+                                                <textarea style="width: 100%; resize: none;" class="input-display" id="description<%= [i]%>" disabled="disabled"><%= workoutPosts[i].exercise_description %></textarea>
+                                            </div>
+                                            <button class="btn btn-primary update" id="save<%= [i]%>" value="<%= workoutPosts[i].id %>" hidden>Save</button>
+                                        </div>
+                                        <div class="card-footer">
+                                            <!-- <small class="text-muted"><%= workoutPosts[i].created_at %></small> -->
+                                            <div class="container">
+                                                <form action="/onfitness/workouts/like" method="POST">
+                                                    <input type="hidden" id="workoutPostId" name="workoutPostId" value="<%= workoutPosts[i].id %>">
+                                                    <button class="btn like" id="like<%= i%>" type="submit" data-toggle="tooltip" title="Like">
+                                                        <i id="icon" class="fas fa-thumbs-up"></i>
+                                                    </button>
+                                                </form>
+                                                <button class="btn edit" id="editId<%= i%>" data-toggle="tooltip" title="Edit" value="disable/enable"><i class="fas fa-edit"></i></button>
+                                                <button class="btn delete" data-toggle="tooltip" title="Delete" value="<%= workoutPosts[i].id %>"><i class="fas fa-trash-alt"></i></button>
+                                            </div>  
+                                        </div>
+                                    </div>
+                                </div>
+                            <% }; %>
+                        <% } %>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+</body>
+</html>

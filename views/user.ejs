@@ -9,7 +9,7 @@
     <title> <%= user.name %></title>
 </head>
 <body>
-    <!-- Modal -->
+    <!-- Modal Create a Post -->
     <div class="modal fade" id="modalPost" tabindex="-1" role="dialog" aria-labelledby="modalPost" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -19,9 +19,10 @@
                 </div>
                 <div class="modal-body">
                     <form action="/onfitness/workouts" method="POST" enctype="multipart/form-data" >
-                            <input type="hidden" id="user_id" name="user_id" value= <%= user.id %>><br>                   
+                            <input type="hidden" id="user_id" name="user_id" value= <%= user.id %>               
                         <label for="myfile">Select a file:</label>
                             <input type="file" id="media" name="media">
+                        <div><span id="workoutPostResult" class="alert-error"></span></div>
                         <label for="exercise_type">Exercise Type</label><br>
                             <input type="text" id="exercise_type" name="exercise_type" required><br>
                         <label for="exercise_description">Exercise Description</label><br>
@@ -35,51 +36,77 @@
             </div>
         </div>
     </div>
+    <!-- Modal Edit Profile -->
+    <div class="modal fade" id="editProfile" tabindex="-1" role="dialog" aria-labelledby="editProfile" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Edit Your Profile</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+                <form action="/onfitness/workouts/user/about" method="POST" enctype="multipart/form-data">
+                    <input type="hidden" id="user_id" name="user_id" value= <%= user.id %>               
+                    <label for="myProfilePic">Select a Picture:</label>
+                        <input type="file" id="pic_profile" name="pic_profile" required>
+                    <label for="about_me">About Me:</label><br>
+                    <textarea id="about_me" name="about_me" rows="4" cols="50"><%= user.about_me %></textarea>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger btn-sm btn-block" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-success btn-sm btn-block updateProfile">Save changes</button>
+                    </div>
+                </form>
+          </div>
+        </div>
+      </div>
     <div class="row py-5 px-4">
         <div class="col-md-5 mx-auto">
-            <!-- Profile widget -->
             <div class="bg-white shadow rounded overflow-hidden">
                 <div class="px-4 pt-0 pb-4 cover">
-                    <div class="logout-buttom">
-                        <a href="/auth/login" class="btn btn-outline-light btn-sm btn-block">Log Out</a>
-                    </div>
+                    <!--Nav Bar -->
+                    <nav class="navbar navbar-expand-lg cover">
+                        <a class="navbar-brand btn btn-outline-light btn-sm btn-block nav-btn" href="/onfitness/user/<%= sessionId%>">
+                          <img src="/public/assets/logo.png" width="40" height="40" class="d-inline-block align-top" alt="">OnFitness
+                        </a>
+                        <div class="collapse navbar-collapse" id="navbarNav">
+                            <ul class="navbar-nav">
+                              <li><a data-toggle="modal" data-target="#editProfile"  class="btn btn-outline-light nav-btn btn-sm btn-block" <%= hide === false ? 'hidden' : '' %>>Edit Profile</a></li>
+                              <li><a href="/onfitness/users/search" class="btn btn-outline-light nav-btn btn-sm btn-block">Search Users</a></li>
+                              <li><a href="/auth/logout" class="btn btn-outline-light nav-btn btn-sm btn-block">Log Out</a></li>
+                            </ul>
+                          </div>
+                    </nav>
                     <div class="row media align-items-end profile-head">
                         <div class="col-3 profile mr-3">
-                            <img src="https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=80" alt="..." width="130" class="rounded mb-2 img-thumbnail" style="display: block;">
-                            <a href="#" class="btn btn-outline-dark btn-sm btn-block">Edit profile</a>
+                            <img src="/<%= user.pic_path.replace(/\\/g, '/') %>" alt="..." width="130" class="rounded mb-2 img-thumbnail" style="display: block;">
                         </div>
                         <div class="col-9 media-body mb-5 text-white">
                             <h4 class="mt-0 mb-0"> <%= user.name %></h4>
-                            <p class="small mb-4"> <i class="fas fa-map-marker-alt mr-2"></i>New York</p>
                         </div>
                     </div>
                 </div>
                 <div class="bg-light p-4 d-flex justify-content-end text-center">
                     <ul class="list-inline mb-0">
                         <li class="list-inline-item">
-                            <h5 class="font-weight-bold mb-0 d-block">215</h5><small class="text-muted"> <i class="fas fa-image mr-1"></i>Photos</small>
+                            <h5 class="font-weight-bold mb-0 d-block"><%= postCount %></h5><small class="text-muted"> <i class="fas fa-image mr-1"></i><%= postCount > 1 ? 'Photos' : 'Photo' %></small>
                         </li>
                         <li class="list-inline-item">
-                            <h5 class="font-weight-bold mb-0 d-block">745</h5><small class="text-muted"> <i class="fas fa-user mr-1"></i>Followers</small>
-                        </li>
-                        <li class="list-inline-item">
-                            <h5 class="font-weight-bold mb-0 d-block">340</h5><small class="text-muted"> <i class="fas fa-user mr-1"></i>Following</small>
+                            <h5 class="font-weight-bold mb-0 d-block"><%= likeCount %></h5><small class="text-muted"><a href="/onfitness/workouts/likes" ><i id="icon" class="fas fa-thumbs-up"></i><%= likeCount > 1 ? 'Likes' : 'Like' %></a></small>
                         </li>
                     </ul>
                 </div>
                 <div class="px-4 py-3">
-                    <h5 class="mb-0">About</h5>
+                    <h5 class="mb-0">About Me</h5>
                     <div class="p-4 rounded shadow-sm bg-light">
-                        <p class="font-italic mb-0">Web Developer</p>
-                        <p class="font-italic mb-0">Lives in New York</p>
-                        <p class="font-italic mb-0">Photographer</p>
+                        <textarea style="width: 100%; height: 100px; resize: none;" class="input-about" disabled="disabled"><%= user.about_me %></textarea>
                     </div>
                 </div>
                 <!-- Button trigger modal -->
                 <div class="px-4 py-3">
-                    <button type="button" class="btn btn-outline-dark btn-sm btn-block" data-toggle="modal" data-target="#modalPost">
-                        Post a Workout
-                    </button>
+                    <button type="button" class="btn btn-outline-dark btn-sm btn-block" data-toggle="modal" data-target="#modalPost" <%= hide === false ? 'hidden' : '' %>>Post a Workout</button>
                 </div>  
                 <div class="py-4 px-4">
                     <div class="d-flex align-items-center justify-content-between mb-3">
@@ -105,14 +132,18 @@
                                             <div>
                                                 <textarea style="width: 100%; resize: none;" class="input-display" id="description<%= [i]%>" disabled="disabled"><%= workoutPost[i].exercise_description %></textarea>
                                             </div>
+                                            <div><span id="alertLike" class="alert-error"></span></div>
                                             <button class="btn btn-primary update" id="save<%= [i]%>" value="<%= workoutPost[i].id %>" hidden>Save</button>
                                         </div>
                                         <div class="card-footer">
-                                            <!-- <small class="text-muted"><%= workoutPost[i].created_at %></small> -->
                                             <div class="container">
-                                                <button class="btn" data-toggle="tooltip" title="Like" value="<%= workoutPost[i].id %>"><i class="fas fa-thumbs-up"></i></button>
-                                                <button class="btn edit" id="editId<%= i%>" data-toggle="tooltip" title="Edit" value="disable/enable"><i class="fas fa-edit"></i></button>
-                                                <button class="btn delete" data-toggle="tooltip" title="Delete" value="<%= workoutPost[i].id %>"><i class="fas fa-trash-alt"></i></button>
+                                                <input type="hidden" id="workoutPostId<%=[i]%>" name="workoutPostId" value="<%= workoutPost[i].id %>">
+                                                <input type="hidden" id="userId<%=[i]%>" name="userId" value="<%= user.id %>">
+                                                <button class="btn like" id="like<%= i%>" type="submit" data-toggle="tooltip" title="Like">
+                                                    <i id="icon" class="fas fa-thumbs-up"></i>
+                                                </button>
+                                                <button class="btn edit" id="editId<%= i%>" data-toggle="tooltip" title="Edit" value="disable/enable" <%= hide === false ? 'hidden' : '' %>><i class="fas fa-edit"></i></button>
+                                                <button class="btn delete" data-toggle="tooltip" title="Delete" value="<%= workoutPost[i].id %>" <%= hide === false ? 'hidden' : '' %>><i class="fas fa-trash-alt"></i></button>
                                             </div>  
                                         </div>
                                     </div>
@@ -124,13 +155,22 @@
             </div>
         </div>
     </div>
-        
-    
+    <script src="/socket.io/socket.io.js"></script>
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
     <script>
+        var socket = io('http://localhost:3000');
+        socket.on('error', function (data) {
+            if(data.message !== undefined && data.message === "This post has already been liked by you."){
+                $('#alertLike').append(data.message)
+            }
+            $('#workoutPostResult').append(data.message);
+            $('#workoutPostResult').append(data);
+            $("#workoutPostResult").show();
+        });
+        
         $('.delete').click(function(){
             var url_id = $(this).val();
             $.ajax({
@@ -157,7 +197,7 @@
             })
             location.reload(true);
         })
-
+        
         $(".edit").click(function() 
         {   
             var id = $(this).attr('id').substr(6);            
@@ -165,20 +205,35 @@
             $("#type" + id).attr('disabled', !$("#type" + id).attr('disabled'));
             $("#save" + id).attr('hidden', !$("#save" + id).attr('hidden'));
             
-            if ($('#description' + id).hasClass('input-display'))
-            {
+            if ($('#description' + id).hasClass('input-display')){
                 $( "#description" + id).removeClass("input-display")
-            } else 
-            {
+            } else {
                 $('#description' + id).addClass("input-display");
             }
-            if ($('#type' + id).hasClass('input-display'))
-            {
+
+            if ($('#type' + id).hasClass('input-display')){
                 $( "#type" + id ).removeClass("input-display")
-            } else 
-            {
+            } else {
                 $('#type' + id).addClass("input-display");
             }
+        });  
+        
+        $(".like").on("click", function (e) 
+        {
+            var id = $(this).attr('id').substr(4);
+            var workoutPostId = $('#workoutPostId' + id).val();
+            var userId = $('#userId' + id).val();
+            $.ajax({
+                type:"POST",
+                url: '/onfitness/workouts/like',
+                data: {_method:'post',
+                       workoutPostId : workoutPostId,
+                       userId: userId  
+                },
+                success: function(data){
+                    console.log(data);
+                }
+            });
         });
     </script>
 </body>

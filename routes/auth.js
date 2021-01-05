@@ -38,9 +38,15 @@ router.post('/signup', controller.createUser)
 
 //Logout
 router.get('/logout', function(req, res, next) {
-    console.log('logging out');
+  console.log("log out")
+    req.session.destroy(function(err){
+      //show oops page
+      req.logout();
+    })
+    console.log("Session destroyed");
+    console.log(req.session);
     req.logout();
-    res.redirect('/');
+    res.redirect('/auth/login');
 })
 
 module.exports = router;

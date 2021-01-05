@@ -13,7 +13,15 @@ function ensureAuthenticated(req, res, next) {
 
 router.get('/user/:id', ensureAuthenticated, controller.findUser) //Get User Page
 
+router.get('/users/search', controller.searchUser)
+
+router.get('/workouts/likes', controller.findLikes);
+
+router.post('/workouts/user/about', controller.createAbout); //Create About me
+
 router.post('/workouts', ensureAuthenticated, controller.create) //Post a workout
+
+router.post('/workouts/like', controller.likePost);
 
 router.patch('/workouts/:id', ensureAuthenticated, controller.update); //Update workout by ID
 

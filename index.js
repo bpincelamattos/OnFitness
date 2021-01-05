@@ -6,18 +6,23 @@ var passport = require('passport');
 var session = require('express-session');
 const flash = require('connect-flash');
 const cookieParser = require('cookie-parser');
-var methodOverride = require('method-override')
 const app = express();
+var http = require('http').Server(app);
+var io = require('socket.io')(http);
 const PORT = 3000;
 
-app.use(methodOverride('_method'))
+ const pgSession = require('connect-pg-simple')(session);
+ const pgStoreConfig = {conString: `postgres://postgres:${process.env.PGP_PASSWORD}@localhost:5432/on_fitnessdb`}
+
 app.use(cookieParser('secret'));
 app.use(flash());
 app.use(session({
-        secret: 'abcdefg',
+        store: new pgSession(pgStoreConfig),
+        secret: `${process.env.SESSION_SECRET}`,
+        name: "OnFitness",
         resave: false,
         saveUninitialized: false,
-        cookie: {maxAge:600000}
+        cookie: {maxAge:7200000, sameSite: false}
     })
 );
 
@@ -48,6 +53,7 @@ app.get('*', (req, res) => {
     res.status(404).send('Nao Achei');
 })
 
-app.listen(PORT, () => {
-    console.log(`Server started on PORT:${PORT}`);
-})
+io.sockets.on('connection', socket => { console.log("socket server connected.") });
+http.listen(PORT, () => console.log(`Server started on PORT:${PORT}`));
+
+exports.io = io;
