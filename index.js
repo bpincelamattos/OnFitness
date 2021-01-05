@@ -54,6 +54,6 @@ app.get('*', (req, res) => {
 })
 
 io.sockets.on('connection', socket => { console.log("socket server connected.") });
-http.listen(PORT || 5000, () => console.log(`Server started on PORT:${PORT}`));
+http.listen(PORT || 5432, () => console.log(`Server started on PORT:${PORT}`));
 
 exports.io = io;
