@@ -6,32 +6,66 @@ const express = require('express');
 const app = express();
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
+const io = require('.././index')
 
 exports.createUser = (req, res) => {
   const name = req.body.name;
   const email = req.body.email;
   const password = req.body.password;
-  bcrypt.hash(password, saltRounds, function(err, hash) {
-    dbFile.db.none("INSERT INTO users (name, email, password) VALUES ($1, $2, $3)", 
-    [name, email, hash]).then( () => {
-      dbFile.db.one("SELECT * from users WHERE email = $1", [email])
+  dbFile.db.oneOrNone("SELECT * from users WHERE email = $1", [email])
       .then((user) =>{
-        res.redirect(`/onfitness/user/${user.id}`);
+        if (user == null ){
+          bcrypt.hash(password, saltRounds, function(err, hash) {
+            dbFile.db.none("INSERT INTO users (name, email, password) VALUES ($1, $2, $3)", 
+            [name, email, hash]).then( () => {
+              dbFile.db.one("SELECT * from users WHERE email = $1", [email])
+              .then((user) =>{
+                res.redirect(`/onfitness/user/${user.id}`);
+              }) 
+            });
+            });
+        } else {
+          var err = {message: "Email already exists"};
+          io.io.sockets.emit('error', err);
+        }
+        
       }) 
-    });
-  });
+ 
 }
 
 //Passport configuration - Facebook Strategy
 passport.use(new FacebookStrategy({
     clientID: process.env.FACEBOOK_CLIENT_ID,
     clientSecret: process.env.FACEBOOK_CLIENT_SECRET,
-    callbackURL: process.env.FB
+    callbackURL: process.env.FB, 
+    profileFields: [ "displayName","email", "photos"]
   },
   function(accessToken, refreshToken, profile, cb) {
-    console.log(profile);
-      return cb(null,profile);
-  }));
+    const provider_id = parseInt(profile.id);
+    const user_name = profile._json.name
+    dbFile.db.oneOrNone('SELECT * FROM users where provider_id = $1', [provider_id])
+      .then((user,err) => {
+        if (err){
+          console.log('ERRO')
+          return cb(err)
+        }
+        if(user == null){
+          dbFile.db.none("INSERT INTO users (name, provider_id) VALUES ($1, $2)", [user_name, provider_id]).then(() => {
+            dbFile.db.one('SELECT * FROM users where provider_id = $1', [provider_id]).then((user) => {
+              return cb(null, user)
+            })
+          });
+        }
+        if(user != null){
+          dbFile.db.one('SELECT * FROM users where provider_id = $1', [provider_id]).then((user) => {
+            return cb(null, user)
+          })
+        }
+      
+    })
+  }
+))
+  
 
 //Passport configuration - localstrategy Strategy
 passport.use(new LocalStrategy({

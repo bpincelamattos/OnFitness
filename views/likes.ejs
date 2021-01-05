@@ -14,7 +14,17 @@
             <!-- Profile widget -->
             <div class="bg-white shadow rounded overflow-hidden">
                 <div class="px-4 pt-0 pb-4 cover">
-                                    
+                    <nav class="navbar navbar-expand-lg cover">
+                        <a class="btn btn-outline-light btn-block nav-btn" style="white-space: nowrap;" href="/onfitness/user/<%= sessionId%>">
+                          <img src="/public/assets/logo.png" width="30" height="30" class="d-inline-block align-top" alt="">OnFitness
+                        </a>
+                        <div class="collapse navbar-collapse" id="navbarNav">
+                            <ul class="navbar-nav">
+                              <li><a href="/onfitness/users/search" height="40" class="btn btn-outline-light nav-btn btn-block ">Search Users</a></li>
+                              <li><a href="/auth/logout" class="btn btn-outline-light nav-btn btn-block logoutLblPos">Log Out</a></li>
+                            </ul>
+                          </div>
+                    </nav>                 
                 <div >
                     
                 </div>
@@ -23,33 +33,19 @@
                 </div>
                 <div class="py-4 px-4">
                     <div class="d-flex align-items-center justify-content-between mb-3">
-                        <h5 class="mb-0">My Likes</h5>
+                        <h5 class="mb-0">Posts Liked %></h5>
                     </div>
                     <div class="row">
-                        <% if (workoutPosts) { %>
-                            <% for (let i=0; i<workoutPosts.length; i++) { %>
+                        <% if (workoutPostResponse) { %>
+                            <% for (let i=0; i<workoutPostResponse.length; i++) { %>
                                 <div class="col" style="margin: auto;">
                                     <div class="card h-100" style="width: 23rem;">
-                                        <img src="/<%= workoutPosts[i].path.replace(/\\/g, '/') %>" class="card-img-top d-block w-100" />
+                                        <img src="/<%= workoutPostResponse[i].path.replace(/\\/g, '/') %>" class="card-img-top d-block w-100" />
                                         <div class="card-body">
-                                            <h5 class="card-title"><input class="input-display" id="type<%= [i]%>" disabled="disabled" value="<%= workoutPosts[i].exercise_type %>"></h5>
+                                            <h5 class="card-title"><input class="input-display" id="type<%= [i]%>" disabled="disabled" value="<%= workoutPostResponse[i].exercise_type %>"></h5>
                                             <div>
-                                                <textarea style="width: 100%; resize: none;" class="input-display" id="description<%= [i]%>" disabled="disabled"><%= workoutPosts[i].exercise_description %></textarea>
+                                                <textarea style="width: 100%; resize: none;" class="input-display" id="description<%= [i]%>" disabled="disabled"><%= workoutPostResponse[i].exercise_description %></textarea>
                                             </div>
-                                            <button class="btn btn-primary update" id="save<%= [i]%>" value="<%= workoutPosts[i].id %>" hidden>Save</button>
-                                        </div>
-                                        <div class="card-footer">
-                                            <!-- <small class="text-muted"><%= workoutPosts[i].created_at %></small> -->
-                                            <div class="container">
-                                                <form action="/onfitness/workouts/like" method="POST">
-                                                    <input type="hidden" id="workoutPostId" name="workoutPostId" value="<%= workoutPosts[i].id %>">
-                                                    <button class="btn like" id="like<%= i%>" type="submit" data-toggle="tooltip" title="Like">
-                                                        <i id="icon" class="fas fa-thumbs-up"></i>
-                                                    </button>
-                                                </form>
-                                                <button class="btn edit" id="editId<%= i%>" data-toggle="tooltip" title="Edit" value="disable/enable"><i class="fas fa-edit"></i></button>
-                                                <button class="btn delete" data-toggle="tooltip" title="Delete" value="<%= workoutPosts[i].id %>"><i class="fas fa-trash-alt"></i></button>
-                                            </div>  
                                         </div>
                                     </div>
                                 </div>

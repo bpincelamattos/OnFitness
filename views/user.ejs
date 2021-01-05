@@ -19,7 +19,7 @@
                 </div>
                 <div class="modal-body">
                     <form action="/onfitness/workouts" method="POST" enctype="multipart/form-data" >
-                            <input type="hidden" id="user_id" name="user_id" value= <%= user.id %>               
+                            <input type="hidden" id="user_id_workoutpost" name="user_id_wp" value= <%= user.id %>               
                         <label for="myfile">Select a file:</label>
                             <input type="file" id="media" name="media">
                         <div><span id="workoutPostResult" class="alert-error"></span></div>
@@ -48,7 +48,7 @@
             </div>
             <div class="modal-body">
                 <form action="/onfitness/workouts/user/about" method="POST" enctype="multipart/form-data">
-                    <input type="hidden" id="user_id" name="user_id" value= <%= user.id %>               
+                    <input type="hidden" id="user_id_profile" name="user_id_pf" value= <%= user.id %>               
                     <label for="myProfilePic">Select a Picture:</label>
                         <input type="file" id="pic_profile" name="pic_profile" required>
                     <label for="about_me">About Me:</label><br>
@@ -68,14 +68,14 @@
                 <div class="px-4 pt-0 pb-4 cover">
                     <!--Nav Bar -->
                     <nav class="navbar navbar-expand-lg cover">
-                        <a class="navbar-brand btn btn-outline-light btn-sm btn-block nav-btn" href="/onfitness/user/<%= sessionId%>">
-                          <img src="/public/assets/logo.png" width="40" height="40" class="d-inline-block align-top" alt="">OnFitness
+                        <a class="btn btn-outline-light btn-block nav-btn" style="white-space: nowrap;" href="/onfitness/user/<%= sessionId%>">
+                          <img src="/public/assets/logo.png" width="30" height="30" class="d-inline-block align-top" alt="">OnFitness
                         </a>
                         <div class="collapse navbar-collapse" id="navbarNav">
                             <ul class="navbar-nav">
-                              <li><a data-toggle="modal" data-target="#editProfile"  class="btn btn-outline-light nav-btn btn-sm btn-block" <%= hide === false ? 'hidden' : '' %>>Edit Profile</a></li>
-                              <li><a href="/onfitness/users/search" class="btn btn-outline-light nav-btn btn-sm btn-block">Search Users</a></li>
-                              <li><a href="/auth/logout" class="btn btn-outline-light nav-btn btn-sm btn-block">Log Out</a></li>
+                              <li><a data-toggle="modal" data-target="#editProfile"  class="btn btn-outline-light nav-btn btn-block" <%= hide === false ? 'hidden' : '' %>>Edit Profile</a></li>
+                              <li><a href="/onfitness/users/searchAll" class="btn btn-outline-light nav-btn btn-block">Search Users</a></li>
+                              <li><a href="/auth/logout" class="btn btn-outline-light nav-btn btn-block">Log Out</a></li>
                             </ul>
                           </div>
                     </nav>
@@ -94,7 +94,7 @@
                             <h5 class="font-weight-bold mb-0 d-block"><%= postCount %></h5><small class="text-muted"> <i class="fas fa-image mr-1"></i><%= postCount > 1 ? 'Photos' : 'Photo' %></small>
                         </li>
                         <li class="list-inline-item">
-                            <h5 class="font-weight-bold mb-0 d-block"><%= likeCount %></h5><small class="text-muted"><a href="/onfitness/workouts/likes" ><i id="icon" class="fas fa-thumbs-up"></i><%= likeCount > 1 ? 'Likes' : 'Like' %></a></small>
+                            <h5 class="font-weight-bold mb-0 d-block"><%= likeCount %></h5><small class="text-muted"><a href="<%= likeCount == 0 ? '#' : '/onfitness/workouts/likes/' + user.id %>"><i id="icon" class="fas fa-thumbs-up"></i><%= likeCount > 1 ? 'Likes' : 'Like' %></a></small>
                         </li>
                     </ul>
                 </div>
@@ -114,7 +114,7 @@
                         <form action="/onfitness/workouts/exerciseType/" method="GET">
                             <div class="input-group" style="width: auto;">
                                 <input type="text" name="search_type"  class="form-control" placeholder="Search Workout by Type" >
-                                <input type="hidden" id="user_id" name="user_id" value= <%= user.id %>>
+                                <input type="hidden" id="user_id_search" name="user_id_sc" value= <%= user.id %>>
                                 <div class="input-group-btn">
                                 <button class="btn btn-default"  type="submit"><i class="fas fa-search"></i></button>
                                 </div>
@@ -132,7 +132,7 @@
                                             <div>
                                                 <textarea style="width: 100%; resize: none;" class="input-display" id="description<%= [i]%>" disabled="disabled"><%= workoutPost[i].exercise_description %></textarea>
                                             </div>
-                                            <div><span id="alertLike" class="alert-error"></span></div>
+                                            <div><span id="alertLike<%= [i]%>" class="alert-error"></span></div>
                                             <button class="btn btn-primary update" id="save<%= [i]%>" value="<%= workoutPost[i].id %>" hidden>Save</button>
                                         </div>
                                         <div class="card-footer">
@@ -161,11 +161,14 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
     <script>
-        var socket = io('https://onfitness.herokuapp.com/');
+        var socket = io('http://localhost:3000');
         socket.on('error', function (data) {
+            
             if(data.message !== undefined && data.message === "This post has already been liked by you."){
-                $('#alertLike').append(data.message)
+               alert("This post has already been liked by you");
             }
+               
+            
             $('#workoutPostResult').append(data.message);
             $('#workoutPostResult').append(data);
             $("#workoutPostResult").show();
@@ -222,7 +225,9 @@
         {
             var id = $(this).attr('id').substr(4);
             var workoutPostId = $('#workoutPostId' + id).val();
+            console.log(workoutPostId);
             var userId = $('#userId' + id).val();
+            console.log(userId)
             $.ajax({
                 type:"POST",
                 url: '/onfitness/workouts/like',

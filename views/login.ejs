@@ -19,7 +19,7 @@
         } 
         </style> 
         <!-- Custom styles for this template -->
-        <link href="/css/loginStyle.css" rel="stylesheet">
+        <link href="/public/css/loginStyle.css" rel="stylesheet">
     </head>
     <body class="login text-center">
         <div id="fb-root"></div>
@@ -29,11 +29,11 @@
             <div class="container">
                 <div class="row">
                     <div class="col-6">
-                        <img src="assets/assets_1.jpg" class="rounded" width="450px" height="600px">
+                        <video class="rounded" height="600px" loop autoplay muted id="vid"><source src="/public/assets/auth_pg.mp4" type="video/mp4"></video>
                     </div> 
-                    <div class="col-5 rounded background-form"> 
+                    <div class="col-4 rounded background-form"> 
                         <form action="/auth/login" method="post">
-                            <img src="assets/logo.png" alt="" width="140" height="140">
+                            <img src="/public/assets/logo.png" alt="" width="140" height="140">
                             <h1 class="h3 mb-3 fw-normal" style="color: white;">Welcome to OnFitnes</h1>
                             <label for="inputEmail" class="visually-hidden">Email address</label>
                             <input type="email" id="inputEmail" name="email" class="form-control" placeholder="Email address" required autofocus>
@@ -43,7 +43,7 @@
                             <a href="/auth/signup">Not a member? Sign up</a>
                             <hr style="color: white;">
                             <p style="color: white;">OR</p>
-                            <div class="fb-login-button"><a href="/auth/facebook">Login with Facebook</a></div>
+                            <div><a class="btn btn-primary" href="/auth/facebook">Login with Facebook</a></div>
                             <% if (errors.length >0) {%>
                                 <div class="alert alert-danger" role="alert"><%= errors %>
                                 <% } %>
@@ -54,5 +54,6 @@
             </div>
         </main>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>  
+        <script>document.getElementById('vid').play();</script>
     </body>
 </html>

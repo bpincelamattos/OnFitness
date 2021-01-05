@@ -14,7 +14,17 @@
             <!-- Profile widget -->
             <div class="bg-white shadow rounded overflow-hidden">
                 <div class="px-4 pt-0 pb-4 cover">
-                    <form action="/onfitness/users/search" method="GET">
+                    <nav class="navbar navbar-expand-lg cover">
+                        <a class="btn btn-outline-light btn-block nav-btn" style="white-space: nowrap;" href="/onfitness/user/<%= sessionId%>">
+                          <img src="/public/assets/logo.png" width="30" height="30" class="d-inline-block align-top" alt="">OnFitness
+                        </a>
+                        <div class="collapse navbar-collapse" id="navbarNav">
+                            <ul class="navbar-nav">
+                              <li><a href="/auth/logout" class="btn btn-outline-light nav-btn btn-block logoutLblPos">Log Out</a></li>
+                            </ul>
+                          </div>
+                    </nav>
+                    <form action="/onfitness/users/searchOne" method="GET">
                         <div class="input-group" style="width: auto;">
                             <input type="text" name="search_user"  class="form-control" placeholder="Search for your Workout Buddy" style="margin-top: 28px;" >
                             <div class="input-group-btn"  style="margin-top: 28px;">
@@ -30,9 +40,9 @@
                             <% for (let i=0; i<users.length; i++) { %>
                                 <div class="item">
                                 <% if(users[i].pic_path) { %>
-                                    <img src="/<%= users[i].pic_path.replace(/\\/g, '/') %>" x="0" y="0" width="100%" height="100%" preserveAspectRatio="xMidYMid slice" class="mb-2" />
+                                    <img src="/<%= users[i].pic_path.replace(/\\/g, '/') %>" x="0" y="0" width="100%" height="100%" preserveAspectRatio="xMidYMid slice" class="mb-2 img-profile" />
                                 <% } else {if (users[i].pic_path == null) { %>
-                                    <img src="/public/assets/avatar_profile.jpg" x="0" y="0" width="100%" height="100%" preserveAspectRatio="xMidYMid slice" class="mb-2" />
+                                    <img src="/public/assets/avatar_profile.jpg" x="0" y="0" width="100%" height="100%" preserveAspectRatio="xMidYMid slice" class="mb-2 img-profile" />
                                     <% }} %>
                                 <p style="display:inline-block"><a style="color:black;" href="/onfitness/user/<%= users[i].id %>"><%= users[i].name %></a></p>
                                 </div>

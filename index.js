@@ -39,10 +39,7 @@ app.use(passport.session());
 //works locally
 //app.use('/public', express.static(process.env.PWD + '/public'));
 
-app.use(express.static(__dirname + '/public'));
-console.log(process.env.PWD + '/public');
-console.log(__dirname + '/public');
-// set the view engine to ejs
+app.use("/public", express.static(__dirname + '/public'));
 app.set('view engine','ejs');
 
 
