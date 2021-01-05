@@ -6,7 +6,7 @@
     "node": "12.18.3"
   },
   "scripts": {
-    "start": "nodemon index.js",
+    "start": "node index.js",
     "db:create": "createdb on_fitnessdb",
     "db:drop": "dropdb on_fitnessdb",
     "db:init": "psql -f ./models/schema.sql on_fitnessdb",
