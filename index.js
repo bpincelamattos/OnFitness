@@ -6,6 +6,7 @@ var passport = require('passport');
 var session = require('express-session');
 const flash = require('connect-flash');
 const cookieParser = require('cookie-parser');
+const path = require('path');
 const app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
@@ -34,7 +35,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 //app.use("/public",express.static(process.env.PWD || __dirname + "public"));
-app.use(express.static(path.normalize(path.join(__dirname, '/public'))));
+app.use("/public", express.static(path.normalize(path.join(process.env.PWD, '/public'))));
 
 // set the view engine to ejs
 app.set('view engine','ejs');
