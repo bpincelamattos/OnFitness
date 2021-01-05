@@ -14,6 +14,7 @@ const DBCONNECTIONSTRING = process.env.DATABASE_URL || `postgres://postgres:${pr
 
  const pgSession = require('connect-pg-simple')(session);
  const pgStoreConfig = {conString: DBCONNECTIONSTRING};
+ process.env.PWD = process.cwd();
 
 app.use(cookieParser('secret'));
 app.use(flash());
@@ -32,7 +33,7 @@ require('./controllers/auth');
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use("/public",express.static(__dirname + "public"));
+app.use("/public",express.static(process.env.PWD || __dirname + "public"));
 
 // set the view engine to ejs
 app.set('view engine','ejs');
