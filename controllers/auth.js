@@ -26,7 +26,7 @@ exports.createUser = (req, res) => {
 passport.use(new FacebookStrategy({
     clientID: process.env.FACEBOOK_CLIENT_ID,
     clientSecret: process.env.FACEBOOK_CLIENT_SECRET,
-    callbackURL: process.env.FACEBOOK_CALL_BACK_URL
+    callbackURL: process.env.FB
   },
   function(accessToken, refreshToken, profile, cb) {
     console.log(profile);
