@@ -36,7 +36,7 @@ app.use(passport.session());
 
 //app.use("/public",express.static(process.env.PWD || __dirname + "public"));
 //app.use(express.static(path.normalize(path.join(process.env.PWD, '/public'))));
-app.use(express.static(path.join(__dirname, '../public'), { maxAge: 86400000 }));
+app.use(express.static(path.join(process.env.PWD, '../public'), { maxAge: 86400000 }));
 
 // set the view engine to ejs
 app.set('view engine','ejs');
