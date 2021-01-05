@@ -2,7 +2,12 @@
   "name": "projectonfitness",
   "version": "1.0.0",
   "main": "index.js",
+  "engines": {
+    "node": "12.18.3",
+    "npm":"6.14.6"
+  },
   "scripts": {
+    "start": "node index.js",
     "db:create": "createdb on_fitnessdb",
     "db:drop": "dropdb on_fitnessdb",
     "db:init": "psql -f ./models/schema.sql on_fitnessdb",

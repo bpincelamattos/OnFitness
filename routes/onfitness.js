@@ -11,17 +11,19 @@ function ensureAuthenticated(req, res, next) {
     res.redirect('/auth/login');
 }
 
-router.get('/user/:id', ensureAuthenticated, controller.findUser) //Get User Page
+router.get('/user/:id', ensureAuthenticated, controller.findUser) //Get User Page by Id
 
-router.get('/users/search', controller.searchUser)
+router.get('/users/searchAll',ensureAuthenticated, controller.findAllUsers) //Get All Users
 
-router.get('/workouts/likes', controller.findLikes);
+router.get('/users/searchOne', ensureAuthenticated, controller.findOneUser) //Get One User (by name)
 
-router.post('/workouts/user/about', controller.createAbout); //Create About me
+router.get('/workouts/likes/:id',ensureAuthenticated, controller.findLikes); //Get all the likes of a user by User_id
+
+router.post('/workouts/user/about',ensureAuthenticated, controller.createAbout); //Create About me
 
 router.post('/workouts', ensureAuthenticated, controller.create) //Post a workout
 
-router.post('/workouts/like', controller.likePost);
+router.post('/workouts/like',ensureAuthenticated, controller.likePost); //Post a like 
 
 router.patch('/workouts/:id', ensureAuthenticated, controller.update); //Update workout by ID
 

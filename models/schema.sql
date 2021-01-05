@@ -1,10 +1,11 @@
 CREATE TABLE users (
     id serial primary key,
+    provider_id bigint,
     name varchar (60),
-    email varchar (60) not null,
+    email varchar (60),
     pic_path varchar,
     about_me varchar,
-    password varchar (60) not null
+    password varchar (60)
 );
 
 CREATE TABLE workoutPost (

@@ -10,9 +10,11 @@ router.get('/facebook', passport.authenticate('facebook'));
 
 //Facebook callback URL
 router.get('/facebook/callback', 
-    passport.authenticate('facebook', 
-    { successRedirect: '/onfitness/create', failureRedirect: '/login' }
-));
+    passport.authenticate('facebook',{  failureRedirect: '/login' }),
+    function(req,res) {
+      const userId = req.user.id;
+      res.redirect(`/onfitness/user/${userId}`);
+    });
 
 //Local-Strategy - Log in
 router.get('/login', (req, res, next) => {

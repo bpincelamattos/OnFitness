@@ -6,13 +6,16 @@ var passport = require('passport');
 var session = require('express-session');
 const flash = require('connect-flash');
 const cookieParser = require('cookie-parser');
+const path = require('path');
 const app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
+const DBCONNECTIONSTRING = process.env.DATABASE_URL || `postgres://postgres:${process.env.PGP_PASSWORD}@localhost:5432/on_fitnessdb`;
 
  const pgSession = require('connect-pg-simple')(session);
- const pgStoreConfig = {conString: `postgres://postgres:${process.env.PGP_PASSWORD}@localhost:5432/on_fitnessdb`}
+ const pgStoreConfig = {conString: DBCONNECTIONSTRING};
+ process.env.PWD = process.cwd();
 
 app.use(cookieParser('secret'));
 app.use(flash());
@@ -31,9 +34,12 @@ require('./controllers/auth');
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use("/public",express.static(__dirname + "/public"));
+//app.use("/public",express.static(process.env.PWD || __dirname + "public"));
+//app.use(express.static(path.normalize(path.join(process.env.PWD, '/public'))));
+//works locally
+//app.use('/public', express.static(process.env.PWD + '/public'));
 
-// set the view engine to ejs
+app.use("/public", express.static(__dirname + '/public'));
 app.set('view engine','ejs');
 
 

@@ -27,7 +27,7 @@
             <div class="container">
                 <div class="row">
                     <div class="col-6">
-                        <img src="/public/assets/assets_1.jpg" class="rounded" width="450px" height="600px">
+                        <video class="rounded" height="600px" loop autoplay muted id="vid"><source src="/public/assets/auth_pg.mp4" type="video/mp4"></video>
                     </div> 
                     <div class="col-4 rounded background-form"> 
                         <form action="/auth/signup" method="post">
@@ -45,6 +45,16 @@
                 </div>
             </div>
         </main>
+        <script src="/socket.io/socket.io.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>  
+        <script>
+            var socket = io('http://localhost:3000');
+            socket.on('error', function (data) {
+            console.log(data)
+            if(data.message !== undefined && data.message === "Email already exists"){
+               alert("Email already exists");
+            }
+        });
+        </script>
     </body>
 </html>
