@@ -9,7 +9,7 @@ const cookieParser = require('cookie-parser');
 const app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
  const pgSession = require('connect-pg-simple')(session);
  const pgStoreConfig = {conString: `postgres://postgres:${process.env.PGP_PASSWORD}@localhost:5432/on_fitnessdb`}
@@ -54,6 +54,6 @@ app.get('*', (req, res) => {
 })
 
 io.sockets.on('connection', socket => { console.log("socket server connected.") });
-http.listen(PORT || process.env.PORT || 5432, () => console.log(`Server started on PORT:${PORT}`));
+http.listen(PORT, () => console.log(`Server started on PORT:${PORT}`));
 
 exports.io = io;
