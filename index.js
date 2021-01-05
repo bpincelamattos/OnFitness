@@ -35,7 +35,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 //app.use("/public",express.static(process.env.PWD || __dirname + "public"));
-app.use(express.static(path.normalize(path.join(process.env.PWD, '/public'))));
+app.use(express.static(path.normalize(path.join(process.env.PWD, 'public'))));
 
 // set the view engine to ejs
 app.set('view engine','ejs');
