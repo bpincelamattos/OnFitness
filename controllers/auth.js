@@ -29,6 +29,7 @@ passport.use(new FacebookStrategy({
     callbackURL: process.env.FACEBOOK_CALL_BACK_URL
   },
   function(accessToken, refreshToken, profile, cb) {
+    console.log(profile);
       return cb(null,profile);
   }));
 
